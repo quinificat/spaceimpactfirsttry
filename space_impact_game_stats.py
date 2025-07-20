@@ -17,7 +17,7 @@ class GameStats():
         # High score should never be reset
         with open('highscore.txt', 'r') as file:
             high_score = file.read()
-            
+
         self.high_score = int(high_score)
 
     def reset_stats(self):
