@@ -47,7 +47,7 @@ def run_game():
         # Watch for keyboard and mouse events.
         sigf.check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets)
 
-        if stats.game_active:
+        if stats.game_active:  
             ship.update()
             sigf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
             sigf.update_aliens(ai_settings, stats, screen, sb, ship, aliens, bullets)

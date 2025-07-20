@@ -1,5 +1,6 @@
 import sys
 import pygame
+import os
 
 from space_impact_settings import Settings
 from space_impact_ship import Ship
@@ -139,7 +140,26 @@ def check_high_score(stats, sb):
     """
     if stats.score > stats.high_score:
         stats.high_score = stats.score
-        sb.prep_high_score
+        new_high_score = str(stats.high_score)
+        highscore_file = 'highscore.txt'
+        store_new_high_score(highscore_file, new_high_score)
+        stats.high_score = int(recall_high_score(highscore_file))
+
+        sb.prep_high_score()
+    
+def store_new_high_score(highscore_file, current_game_high_score_str):
+    # Store high score
+    with open(highscore_file, 'w') as file_object:
+        file_object.write(current_game_high_score_str)
+
+def recall_high_score(highscore_file):
+    # Recall previous high score
+    if not os.path.exists(highscore_file):
+        # Create the file with a default score of 0
+        with open(highscore_file, 'w') as file:
+            file.write("0")
+    with open(highscore_file, 'r') as file:
+        return file.read()
 
 def get_number_aliens_y(ai_settings, alien_height):
     """
