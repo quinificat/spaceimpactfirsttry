@@ -1,1 +1,1 @@
-# This is my first attempt at creating a game. I used the book Python Crash Course by Eric Matthes in order to learn the basics of Python as well as learn how to code the programs and games I want. Enjoy (:
+# This is my first attempt at creating a game inspired by the game Space Impact in the original Nokia 3110. I used the book Python Crash Course by Eric Matthes in order to learn the basics of Python as well as learn how to code the programs and games I want. Enjoy (:
