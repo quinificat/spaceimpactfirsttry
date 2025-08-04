@@ -1,3 +1,4 @@
+import json
 from space_impact_settings import Settings
 
 class GameStats():
@@ -15,8 +16,8 @@ class GameStats():
         self.game_active = False
 
         # High score should never be reset
-        with open('highscore.txt', 'r') as file:
-            high_score = file.read()
+        with open('highscore.json') as file:
+            high_score = json.load(file)
 
         self.high_score = int(high_score)
 

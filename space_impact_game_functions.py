@@ -1,6 +1,7 @@
 import sys
 import pygame
 import os
+import json
 
 from space_impact_settings import Settings
 from space_impact_ship import Ship
@@ -134,14 +135,13 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
 
         create_fleet(ai_settings, screen, ship, aliens)
 
-def check_high_score(stats, sb):
+def check_high_score(stats, sb, highscore_file = 'highscore.json'):
     """
     Check to see if there's a new high score
     """
     if stats.score > stats.high_score:
         stats.high_score = stats.score
         new_high_score = str(stats.high_score)
-        highscore_file = 'highscore.txt'
         store_new_high_score(highscore_file, new_high_score)
         stats.high_score = int(recall_high_score(highscore_file))
 
@@ -150,16 +150,16 @@ def check_high_score(stats, sb):
 def store_new_high_score(highscore_file, current_game_high_score_str):
     # Store high score
     with open(highscore_file, 'w') as file_object:
-        file_object.write(current_game_high_score_str)
+        json.dump(current_game_high_score_str, file_object)
 
 def recall_high_score(highscore_file):
     # Recall previous high score
     if not os.path.exists(highscore_file):
         # Create the file with a default score of 0
-        with open(highscore_file, 'w') as file:
-            file.write("0")
-    with open(highscore_file, 'r') as file:
-        return file.read()
+        with open(highscore_file, 'w') as file_object:
+            json.dump("0")
+    with open(highscore_file) as file:
+        return json.load(file)
 
 def get_number_aliens_y(ai_settings, alien_height):
     """
@@ -225,7 +225,7 @@ def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
     Respond to ship being hit by alien
     """
     # Reduce number of ship lives left
-    if stats.ships_left > 0:
+    if stats.ships_left > 1:
         stats.ships_left -= 1
         aliens.empty()
         bullets.empty()
@@ -242,6 +242,8 @@ def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
         sleep(1.0)
 
     else:
+        stats.ships_left -= 1
+        sb.prep_ships()
         # Empty the list of aliens and bullets
         stats.game_active = False
         pygame.mouse.set_visible(True)
@@ -264,7 +266,7 @@ def check_aliens_left(ai_settings, stats, screen, sb, ship, aliens, bullets):
     """
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
-        if alien.rect.left == screen_rect.left:
+        if alien.rect.left == screen_rect.left + 5.0:
             # This is an equivalent of the ship getting hit
             ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets)
             break
